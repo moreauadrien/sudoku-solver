@@ -1,5 +1,22 @@
+<style>
+	div {
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(#06beb6, #48b1bf);
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+</style>
+
 <script>
-	let name = 'world';
+	import Grid from './components/Grid.svelte';
+	import Utils from './Utils.svelte';
 </script>
 
-<h1>Hello {name}!</h1>
+<div>
+	<Grid />
+</div>
+
+<Utils />
