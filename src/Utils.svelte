@@ -5,10 +5,11 @@
 
 <style>
     p {
-        color: white;
+        color: black;
         position: fixed;
         left: 0;
         top: 0;
+        margin: 5px;
     }
 </style>
 

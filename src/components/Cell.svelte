@@ -1,53 +1,46 @@
 <style>
     div {
+        width: 100%;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-
-        font-size: sans-serif;
-        font-size: 20px;
-
-        border: 1px solid #EDEDFA;
-    }
-
-    .borderTop {
-        border-top-width: 0px;
     }
 
     .borderRight {
-        border-right-width: 4px;
+        border-right: 1px solid #F5F5F5;
     }
 
     .borderBottom {
-        border-bottom-width: 4px;
+        border-bottom: 1px solid #F5F5F5;
     }
 
-    .noBottom {
-        border-bottom-width: 0px;
+    .largeRight {
+        border-right: 3px solid #B8B8B8;
     }
 
-    .noRight {
-        border-right-width: 0px;
+    .largeBottom {
+        border-bottom: 3px solid #B8B8B8;
     }
 
-    .borderLeft {
-        border-left-width: 0px;
-    }
+    
 </style>
 
 <script>
     export let index;
-    export let value;
 
-    let borderTop = index <= 8;
-    let borderRight = index % 9 % 3 == 2;
-    let borderBottom = Math.floor(index / 9) % 3 == 2;
-    let borderLeft = index % 9 == 0;
+    let borderRight = index%9 != 8;
+    let borderBottom = Math.floor(index / 9) != 8;
 
-    let noRight = index%9 == 8;
-    let noBottom = Math.floor(index / 9) == 8;
+    let largeRight = [2, 5].includes(index%9);
+    let largeBottom = [2, 5].includes(Math.floor(index/9));
 </script>
 
-<div class:borderTop class:borderRight class:borderBottom class:borderLeft class:noRight class:noBottom>
-    <span>{value}</span>
+<div 
+    class:borderRight
+    class:borderBottom
+    class:largeRight
+    class:largeBottom
+    >
+        <span>{index}</span>
 </div>

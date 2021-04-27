@@ -2,7 +2,7 @@
 	div {
 		width: 100%;
 		height: 100%;
-		background: linear-gradient(#06beb6, #48b1bf);
+		background: #E2E9F3;
 
 		display: flex;
 		justify-content: center;
@@ -11,9 +11,10 @@
 </style>
 
 <script>
-	import Grid from './components/Grid.svelte';
 	import Utils from './Utils.svelte';
+	import Grid from './components/Grid.svelte';
 </script>
+
 
 <div>
 	<Grid />
