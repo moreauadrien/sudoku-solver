@@ -8,11 +8,11 @@
     }
 
     .borderRight {
-        border-right: 1px solid #F5F5F5;
+        border-right: 2px solid #F5F5F5;
     }
 
     .borderBottom {
-        border-bottom: 1px solid #F5F5F5;
+        border-bottom: 2px solid #F5F5F5;
     }
 
     .largeRight {

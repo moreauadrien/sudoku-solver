@@ -1,0 +1,9 @@
+<script>
+    export let width;
+    export let height;
+    export let color;
+</script>
+
+<svg {width} {height} viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.5 2V5.5V2ZM23 2V5.5V2ZM12.5 30V33.5V30ZM23 30V33.5V30ZM5.5 12.5H2H5.5ZM5.5 23H2H5.5ZM33.5 12.5H30H33.5ZM33.5 23H30H33.5ZM9 30H26.5C27.4283 30 28.3185 29.6313 28.9749 28.9749C29.6313 28.3185 30 27.4283 30 26.5V9C30 8.07174 29.6313 7.1815 28.9749 6.52513C28.3185 5.86875 27.4283 5.5 26.5 5.5H9C8.07174 5.5 7.1815 5.86875 6.52513 6.52513C5.86875 7.1815 5.5 8.07174 5.5 9V26.5C5.5 27.4283 5.86875 28.3185 6.52513 28.9749C7.1815 29.6313 8.07174 30 9 30ZM12.5 12.5H23V23H12.5V12.5Z" stroke={color} stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
