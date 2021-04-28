@@ -1,6 +1,6 @@
 <style>
     div {
-        --size: 550px;
+        --size: 450px;
         background-color: white;
         width: var(--size);
         height: var(--size);
@@ -13,11 +13,12 @@
 
 <script>
     import Cell from './Cell.svelte';
+    import { sudoku } from '../stores.js';
 </script>
 
 
 <div>
-    {#each Array(81) as _, i}
-        <Cell index={i} />
+    {#each $sudoku as cell}
+        <Cell index={cell.index} bind:value={cell.value}/>
     {/each}
 </div>

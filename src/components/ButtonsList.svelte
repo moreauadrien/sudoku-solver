@@ -7,7 +7,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: 450px;
+        height: 400px;
         transform: translateY(-50px);
         margin-left: 15px;
     }
@@ -23,4 +23,6 @@
     <Button value="7" />
     <Button value="8" />
     <Button value="9" />
+    <Button value="erase" />
+
 </div>

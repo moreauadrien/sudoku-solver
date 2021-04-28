@@ -13,8 +13,25 @@
 
 <script>
     export let value;
+
+    import { currentFocus, sudoku, setValue } from '../stores.js';
+    import Erase from '../icons/Erase.svelte';
+
+    const handleClick = () => {
+        if($currentFocus == undefined) return;
+
+
+        setValue($currentFocus, value == 'erase' ? undefined : parseInt(value));
+
+    }
 </script>
 
-<div>
-    <span>{value}</span>
+<div on:click={handleClick}>
+
+    {#if value=='erase'}
+        <Erase width={25} height={25} color='black'/>
+    {:else}
+        <span>{value}</span>
+    {/if}
+    
 </div>

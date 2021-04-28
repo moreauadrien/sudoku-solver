@@ -16,11 +16,12 @@
 	}
 </style>
 
-<script>
+<script lang="ts">
 	import Utils from './Utils.svelte';
 	import Grid from './components/Grid.svelte';
 	import ButtonsList from './components/ButtonsList.svelte';
 	import Toolbar from './components/Toolbar.svelte';
+	import NumberInput from './components/NumberInput.svelte';
 </script>
 
 
@@ -31,5 +32,7 @@
 	</div>
 	<ButtonsList />
 </div>
+
+
 
 <Utils />

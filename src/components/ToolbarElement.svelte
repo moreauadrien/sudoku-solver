@@ -26,21 +26,22 @@
         font-family: Arial;
         font-weight: 700;
         margin-top: 5px;
+        font-size: 14px;
     }
 </style>
 
 <div class="tool">
     {#if name.toLowerCase() == 'candidates'}
-        <Candidates width={55} height={55} color={defaultIconColor}/>
+        <Candidates width={35} height={35} color={defaultIconColor}/>
 
     {:else if name.toLowerCase() == 'hint'}
-        <Hint width={44} height={44} color={defaultIconColor} />
+        <Hint width={35} height={35} color={defaultIconColor} />
 
     {:else if name.toLowerCase() == 'check'}
-        <Check width={30} height={30} color={defaultIconColor} />
+        <Check width={25} height={25} color={defaultIconColor} />
 
     {:else if name.toLowerCase() == 'solve'}
-        <Solve width={30} height={30} color={defaultIconColor} />
+        <Solve width={25} height={25} color={defaultIconColor} />
     {/if}
 
     <span>{capitalize(name)}</span>
