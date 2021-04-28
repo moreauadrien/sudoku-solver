@@ -10,6 +10,8 @@
         z-index: 2;
 
         font-size: 20px;
+        transform: scale(1);
+        transition: transform .3s ease-out;
     }
 
     .borderRight {
@@ -29,8 +31,15 @@
     }
 
     .isSelected {
-        background-color: #07CFAA;
+        /*background-color: #07CFAA;*/
         color: white;
+
+
+        /*opacity: 0.4;
+        transform: scale(3);
+        z-index: 4;
+        box-shadow: 0px 15px 35px hsla(0.0%, .2);
+        border: none;*/
     }
 
     span {
@@ -38,6 +47,8 @@
         user-select: none;
     }
     
+    
+
 </style>
 
 <script>
@@ -52,6 +63,8 @@
 
     import { currentFocus } from '../stores.js';
 
+    import Keypad from './Keypad.svelte';
+
     $: isSelected = $currentFocus == index;
 
     const handleClick = () => {
@@ -62,9 +75,15 @@
         }
         
     }
+
+
+    let cell;
 </script>
 
 
+{#if isSelected}
+    <Keypad cell={cell}/>
+{/if}
 
 <div 
     class:borderRight
@@ -73,7 +92,7 @@
     class:largeBottom
     class='cell'
     class:isSelected
-
+    bind:this={cell}
     on:click={handleClick}
 >
     <span>{value || ''}</span>

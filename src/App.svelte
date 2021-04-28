@@ -33,6 +33,4 @@
 	<ButtonsList />
 </div>
 
-
-
 <Utils />
