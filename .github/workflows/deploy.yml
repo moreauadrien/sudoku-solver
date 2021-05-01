@@ -1,0 +1,19 @@
+name: Deployment
+
+on:
+  push:
+    branches: [ master ]
+    
+  workflow_dispatch:
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: Webhook Action
+        uses: joelwmale/webhook-action@2.1.0
+        with:
+          url: https://adrienmoreau.fr/gitupdate?token=6EA36D8762C252459DB324249E584
