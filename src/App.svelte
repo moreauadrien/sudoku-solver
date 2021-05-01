@@ -32,5 +32,3 @@
 </div>
 
 <Utils />
-
-<p>Test</p>
