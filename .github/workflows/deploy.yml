@@ -16,5 +16,4 @@ jobs:
       - name: Webhook Action
         uses: joelwmale/webhook-action@2.1.0
         with:
-          url: http://adrienmoreau.fr/gitupdate
-          insecure: true
+          url: https://adrienmoreau.fr/gitupdate?token=6EA36D8762C252459DB324249E584
