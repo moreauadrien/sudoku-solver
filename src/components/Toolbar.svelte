@@ -21,4 +21,5 @@
     <ToolbarElement name='hint'/>
     <ToolbarElement name='check'/>
     <ToolbarElement name='solve'/>
+    <ToolbarElement name='erase'/>
 </div>

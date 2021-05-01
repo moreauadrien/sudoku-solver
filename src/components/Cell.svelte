@@ -61,13 +61,19 @@
     let largeRight = [2, 5].includes(index%9);
     let largeBottom = [2, 5].includes(Math.floor(index/9));
 
-    import { currentFocus } from '../stores.js';
+    import { currentFocus, activeTask } from '../stores.js';
 
     import Keypad from './Keypad.svelte';
 
     $: isSelected = $currentFocus == index;
 
     const handleClick = () => {
+        if($activeTask == 'erase') {
+            activeTask.set(undefined);
+            value = undefined;
+            return;
+        }
+
         if(!isSelected) {
             currentFocus.set(index);
         } else {
@@ -78,11 +84,17 @@
 
 
     let cell;
+
+
+    const handleInput = (e) => {
+        value = e.detail.value;
+        currentFocus.set(undefined);
+    }
 </script>
 
 
 {#if isSelected}
-    <Keypad cell={cell}/>
+    <Keypad cell={cell} on:numberInput={handleInput}/>
 {/if}
 
 <div 

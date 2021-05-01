@@ -17,20 +17,6 @@
         animation-fill-mode: forwards;
     }
 
-    .keypad > div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .keypad > div > span {
-        text-align: center;
-        color: white;
-        font-size: 20px;
-        font-family: Arial;
-        font-weight: 500;
-    }
-
 
     @keyframes scaleUp {
         from {
@@ -68,14 +54,15 @@
             currentFocus.set(undefined);
         }
     }
+
+
+    import NumberButton from './NumberButton.svelte';
 </script>
 
 <svelte:window on:click={handleClick}/>
 
 <div bind:this={keypad} class="keypad" style="top: {cell.getBoundingClientRect().y - cellSize}px; left: {cell.getBoundingClientRect().x - cellSize}px">
     {#each Array(9) as _, i}
-        <div>
-            <span>{i+1}</span>
-        </div>
+        <NumberButton value={i + 1} on:numberInput/>
     {/each}
 </div>
