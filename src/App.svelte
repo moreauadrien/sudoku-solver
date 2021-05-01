@@ -32,5 +32,3 @@
 </div>
 
 <Utils />
-
-<p>Test Webhook on push #3</p>
