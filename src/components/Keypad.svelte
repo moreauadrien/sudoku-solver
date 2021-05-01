@@ -15,6 +15,9 @@
 
         animation: scaleUp 0.3s ease-out;
         animation-fill-mode: forwards;
+
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
     }
 
 

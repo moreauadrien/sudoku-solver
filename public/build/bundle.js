@@ -752,7 +752,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (65:4) {#each Array(9) as _, i}
+    // (68:4) {#each Array(9) as _, i}
     function create_each_block$1(ctx) {
     	let numberbutton;
     	let current;
@@ -791,7 +791,7 @@ var app = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(65:4) {#each Array(9) as _, i}",
+    		source: "(68:4) {#each Array(9) as _, i}",
     		ctx
     	});
 
@@ -819,10 +819,10 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(div, "class", "keypad svelte-1vf9z1x");
+    			attr_dev(div, "class", "keypad svelte-10qdb8x");
     			set_style(div, "top", /*cell*/ ctx[0].getBoundingClientRect().y - cellSize + "px");
     			set_style(div, "left", /*cell*/ ctx[0].getBoundingClientRect().x - cellSize + "px");
-    			add_location(div, file$a, 63, 0, 1338);
+    			add_location(div, file$a, 66, 0, 1422);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
