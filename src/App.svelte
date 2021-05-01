@@ -29,7 +29,6 @@
 		<Toolbar />
 	</div>
 	<!--<ButtonsList />-->
-	<p>Test</p>
 </div>
 
 <Utils />

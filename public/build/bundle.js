@@ -2921,8 +2921,6 @@ var app = (function () {
     	let t0;
     	let toolbar;
     	let t1;
-    	let p;
-    	let t3;
     	let utils;
     	let current;
     	grid = new Grid({ $$inline: true });
@@ -2937,13 +2935,9 @@ var app = (function () {
     			t0 = space();
     			create_component(toolbar.$$.fragment);
     			t1 = space();
-    			p = element("p");
-    			p.textContent = "Test";
-    			t3 = space();
     			create_component(utils.$$.fragment);
     			attr_dev(div0, "class", "column svelte-1n8gzef");
     			add_location(div0, file, 25, 1, 428);
-    			add_location(p, file, 30, 1, 507);
     			attr_dev(div1, "class", "container svelte-1n8gzef");
     			add_location(div1, file, 24, 0, 403);
     		},
@@ -2956,9 +2950,7 @@ var app = (function () {
     			mount_component(grid, div0, null);
     			append_dev(div0, t0);
     			mount_component(toolbar, div0, null);
-    			append_dev(div1, t1);
-    			append_dev(div1, p);
-    			insert_dev(target, t3, anchor);
+    			insert_dev(target, t1, anchor);
     			mount_component(utils, target, anchor);
     			current = true;
     		},
@@ -2980,7 +2972,7 @@ var app = (function () {
     			if (detaching) detach_dev(div1);
     			destroy_component(grid);
     			destroy_component(toolbar);
-    			if (detaching) detach_dev(t3);
+    			if (detaching) detach_dev(t1);
     			destroy_component(utils, detaching);
     		}
     	};
