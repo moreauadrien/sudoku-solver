@@ -508,6 +508,15 @@ var app = (function () {
         board[i] = { index: cell.index, value: cell.value, candidates: cell.candidates };
     }
 
+
+    const generateEmptyGrid = () => {
+        let grid = [];
+        for (let i = 0; i < 81; i++) {
+            grid.push({ index: i, value: undefined, candidates: [1, 2, 3, 4, 5, 6, 7, 8, 9] });
+        }
+        return grid
+    };
+
     const copyGrid = (grid) => {
         let newGrid = [];
         grid.forEach(cell => {
@@ -592,7 +601,7 @@ var app = (function () {
     };
 
     const createSudokuStore = () => {
-        const { subscribe, update } = writable(/*generateEmptyGrid()*/board);
+        const { subscribe, update } = writable(generateEmptyGrid());
 
         return {
             subscribe,

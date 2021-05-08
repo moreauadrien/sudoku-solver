@@ -134,7 +134,7 @@ const calculateCandidates = (grid) => {
 }
 
 const createSudokuStore = () => {
-    const { subscribe, update } = writable(/*generateEmptyGrid()*/board)
+    const { subscribe, update } = writable(generateEmptyGrid())
 
     return {
         subscribe,
