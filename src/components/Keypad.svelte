@@ -40,7 +40,7 @@
 
         background-color: hsla(169, 93%, 42%, 0.6);
 
-        animation: scaleUp 0.3s ease-out;
+        animation: scaleUp 0.2s ease-out;
         animation-fill-mode: forwards;
         backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);

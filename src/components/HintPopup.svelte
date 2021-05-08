@@ -13,13 +13,14 @@
             hint = getHint($sudoku)?.getAsObject()
             if(hint != undefined) {
                 highlightCase.set(hint.index)
-                show = true
             }
+            show = true
         }
     })
 
     function handleClick() {
         show = false
+        hint = undefined
         activeTask.set(undefined)
     }
 </script>
@@ -64,7 +65,7 @@
 {#if show}
 <div class="graybackground">
     <div class="popup">
-        <p>La case mise en valeur ne peux contenir qu'un {hint.value}</p>
+        <p>{hint?.hint || "Aucun indice"}</p>
         <button on:click={handleClick}>Ok</button>
     </div>
 </div>

@@ -15,6 +15,7 @@
     $: isSelected = $currentFocus == index
 
     const handleClick = () => {
+        if($highlightCase == undefined) highlightCase.set(undefined)
         if ($activeTask == "erase") {
             activeTask.set(undefined)
             sudoku.setCellValue(index, undefined)
@@ -32,7 +33,7 @@
 
     const handleInput = (e) => {
         sudoku.setCellValue(index, e.detail.value)
-        highlightCase.set(undefined)
+        
         //value = e.detail.value
         currentFocus.set(undefined)
     }
