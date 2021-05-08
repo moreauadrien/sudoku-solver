@@ -17,7 +17,7 @@
     const handleClick = () => {
         if ($activeTask == "erase") {
             activeTask.set(undefined)
-            value = undefined
+            sudoku.setCellValue(index, undefined)
             return
         }
 
