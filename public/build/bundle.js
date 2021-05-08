@@ -494,6 +494,121 @@ var app = (function () {
         return { set, update, subscribe };
     }
 
+    const getRows = (grid) => {
+        let rows = [];
+        for (let i = 0; i < 9; i++) {
+            rows = [...rows, grid.slice(i * 9, 9 + i * 9)];
+        }
+        return rows;
+    };
+    const getColumns = (grid) => {
+        let columns = [];
+        for (let i = 0; i < 9; i++) {
+            columns = [
+                ...columns,
+                [
+                    grid[i + 9 * 0],
+                    grid[i + 9 * 1],
+                    grid[i + 9 * 2],
+                    grid[i + 9 * 3],
+                    grid[i + 9 * 4],
+                    grid[i + 9 * 5],
+                    grid[i + 9 * 6],
+                    grid[i + 9 * 7],
+                    grid[i + 9 * 8],
+                ],
+            ];
+        }
+        return columns;
+    };
+    const getSquares = (grid) => {
+        let squares = [];
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                squares = [
+                    ...squares,
+                    [
+                        grid[0 + j * 3 + i * 27],
+                        grid[1 + j * 3 + i * 27],
+                        grid[2 + j * 3 + i * 27],
+                        grid[9 + j * 3 + i * 27],
+                        grid[10 + j * 3 + i * 27],
+                        grid[11 + j * 3 + i * 27],
+                        grid[18 + j * 3 + i * 27],
+                        grid[19 + j * 3 + i * 27],
+                        grid[20 + j * 3 + i * 27],
+                    ],
+                ];
+            }
+        }
+        return squares;
+    };
+    const copyGrid = (grid) => {
+        let newGrid = [];
+        grid.forEach(cell => {
+            newGrid.push(Object.assign({}, cell));
+        });
+        return newGrid;
+    };
+    const reducer = (accumulator, cell) => (cell.value) ? [...accumulator, cell.value] : accumulator;
+    const calculateCandidates = (grid) => {
+        grid = copyGrid(grid);
+        //lines work
+        for (let i = 0; i < 9; i++) {
+            let lineNumbers = grid.slice(i * 9, i * 9 + 9).reduce(reducer, []);
+            let candidates = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            candidates = candidates.filter(number => lineNumbers.indexOf(number) == -1);
+            for (let index = 0; index < 9; index++) {
+                let cell = grid[index + 9 * i];
+                if (cell.value == undefined) {
+                    cell.candidates = candidates;
+                }
+                else {
+                    cell.candidates = [];
+                }
+            }
+        }
+        //columns work
+        for (let i = 0; i < 9; i++) {
+            let columnNumbers = [];
+            for (let j = 0; j < 9; j++) {
+                let value = grid[i + j * 9].value;
+                if (value != undefined)
+                    columnNumbers.push(value);
+            }
+            //@ts-ignore
+            columnNumbers = [...new Set(columnNumbers)];
+            for (let index = 0; index < 9; index++) {
+                let cell = grid[i + index * 9];
+                cell.candidates = cell.candidates.filter(number => columnNumbers.indexOf(number) == -1);
+            }
+        }
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                let indexes = [
+                    0 + j * 3 + i * 27,
+                    1 + j * 3 + i * 27,
+                    2 + j * 3 + i * 27,
+                    9 + j * 3 + i * 27,
+                    10 + j * 3 + i * 27,
+                    11 + j * 3 + i * 27,
+                    18 + j * 3 + i * 27,
+                    19 + j * 3 + i * 27,
+                    20 + j * 3 + i * 27,
+                ];
+                let squareNumbers = indexes.map(index => grid[index].value);
+                //@ts-ignore
+                squareNumbers = [...new Set(squareNumbers)].filter(number => number != undefined);
+                for (let iter = 0; iter < 9; iter++) {
+                    let index = indexes[iter];
+                    let cell = grid[index];
+                    cell.candidates = cell.candidates.filter(number => squareNumbers.indexOf(number) == -1);
+                }
+            }
+        }
+        return grid;
+    };
+
     const currentFocus = writable(undefined);
 
     const activeTask = writable(undefined);
@@ -501,107 +616,15 @@ var app = (function () {
     const highlightCase = writable(undefined);
 
 
-    let board = JSON.parse("[{\"index\":0,\"value\":4,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":2,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":3,\"value\":2,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":4,\"value\":9,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":5,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":7,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":8,\"value\":5,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":9,\"value\":2,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":10,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":11,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":12,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":13,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":14,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":15,\"value\":8,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":16,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":17,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":18,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":19,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":20,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":21,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":22,\"value\":8,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":23,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":24,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":25,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":26,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":27,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":28,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":29,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":30,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":31,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":32,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":33,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":34,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":35,\"value\":2,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":36,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":37,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":38,\"value\":5,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":39,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":40,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":41,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":42,\"value\":4,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":43,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":44,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":45,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":46,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":47,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":48,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":49,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":50,\"value\":8,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":51,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":52,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":53,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":54,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":55,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":56,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":57,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":58,\"value\":2,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":59,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":60,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":61,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":62,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":63,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":64,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":65,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":66,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":67,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":68,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":69,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":70,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":71,\"value\":4,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":72,\"value\":8,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":73,\"value\":9,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":74,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":75,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":76,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":77,\"value\":5,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":78,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":79,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":80,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]}]");
+    let board = JSON.parse("[{\"index\":0,\"candidates\":[3,4,6,7,8,9]},{\"index\":1,\"candidates\":[1,3,4,7,9]},{\"index\":2,\"candidates\":[1,3,4,6,8,9]},{\"index\":3,\"candidates\":[1,2,3,5,7]},{\"index\":4,\"candidates\":[1,2,4,5,6]},{\"index\":5,\"candidates\":[1,2,4,6,7,9]},{\"index\":6,\"candidates\":[1,3,4,5]},{\"index\":7,\"candidates\":[1,2,6]},{\"index\":8,\"candidates\":[2,3,6]},{\"index\":9,\"value\":2,\"candidates\":[]},{\"index\":10,\"candidates\":[1,3,4,7]},{\"index\":11,\"candidates\":[1,3,4,6]},{\"index\":12,\"candidates\":[1,3,5,7]},{\"index\":13,\"candidates\":[1,4,5,6]},{\"index\":14,\"candidates\":[1,4,6,7]},{\"index\":15,\"candidates\":[1,3,4,5]},{\"index\":16,\"value\":8,\"candidates\":[]},{\"index\":17,\"value\":9,\"candidates\":[]},{\"index\":18,\"value\":5,\"candidates\":[]},{\"index\":19,\"candidates\":[1,3,4,9]},{\"index\":20,\"candidates\":[1,3,4,6,9]},{\"index\":21,\"candidates\":[1,2,3]},{\"index\":22,\"candidates\":[1,2,4,6]},{\"index\":23,\"value\":8,\"candidates\":[]},{\"index\":24,\"value\":7,\"candidates\":[]},{\"index\":25,\"candidates\":[1,2,6]},{\"index\":26,\"candidates\":[2,3,6]},{\"index\":27,\"candidates\":[6,7,8]},{\"index\":28,\"candidates\":[1,7]},{\"index\":29,\"value\":5,\"candidates\":[]},{\"index\":30,\"candidates\":[1,7,8]},{\"index\":31,\"value\":9,\"candidates\":[]},{\"index\":32,\"candidates\":[1,6,7]},{\"index\":33,\"value\":2,\"candidates\":[]},{\"index\":34,\"value\":3,\"candidates\":[]},{\"index\":35,\"value\":4,\"candidates\":[]},{\"index\":36,\"candidates\":[4,8]},{\"index\":37,\"candidates\":[1,2,4]},{\"index\":38,\"candidates\":[1,4,8]},{\"index\":39,\"candidates\":[1,2,8]},{\"index\":40,\"value\":3,\"candidates\":[]},{\"index\":41,\"value\":5,\"candidates\":[]},{\"index\":42,\"value\":6,\"candidates\":[]},{\"index\":43,\"value\":9,\"candidates\":[]},{\"index\":44,\"value\":7,\"candidates\":[]},{\"index\":45,\"candidates\":[3,6,7,9]},{\"index\":46,\"candidates\":[2,3,7,9]},{\"index\":47,\"candidates\":[3,6,9]},{\"index\":48,\"value\":4,\"candidates\":[]},{\"index\":49,\"candidates\":[2,6]},{\"index\":50,\"candidates\":[2,6,7]},{\"index\":51,\"value\":8,\"candidates\":[]},{\"index\":52,\"value\":5,\"candidates\":[]},{\"index\":53,\"value\":1,\"candidates\":[]},{\"index\":54,\"candidates\":[3,4,9]},{\"index\":55,\"candidates\":[3,4,5,9]},{\"index\":56,\"value\":7,\"candidates\":[]},{\"index\":57,\"candidates\":[1,2,5,8]},{\"index\":58,\"candidates\":[1,2,4,5,8]},{\"index\":59,\"candidates\":[1,2,4]},{\"index\":60,\"candidates\":[1,3]},{\"index\":61,\"candidates\":[1,2,6]},{\"index\":62,\"candidates\":[2,3,6]},{\"index\":63,\"value\":1,\"candidates\":[]},{\"index\":64,\"value\":8,\"candidates\":[]},{\"index\":65,\"value\":2,\"candidates\":[]},{\"index\":66,\"value\":6,\"candidates\":[]},{\"index\":67,\"value\":7,\"candidates\":[]},{\"index\":68,\"value\":3,\"candidates\":[]},{\"index\":69,\"value\":9,\"candidates\":[]},{\"index\":70,\"value\":4,\"candidates\":[]},{\"index\":71,\"value\":5,\"candidates\":[]},{\"index\":72,\"candidates\":[3,4]},{\"index\":73,\"value\":6,\"candidates\":[]},{\"index\":74,\"candidates\":[3,4]},{\"index\":75,\"value\":9,\"candidates\":[]},{\"index\":76,\"candidates\":[1,2,4,5]},{\"index\":77,\"candidates\":[1,2,4]},{\"index\":78,\"candidates\":[1,3]},{\"index\":79,\"candidates\":[1,2,7]},{\"index\":80,\"value\":8,\"candidates\":[]}]");
 
     for (let i = 0; i < 81; i++) {
         let cell = board[i];
         board[i] = { index: cell.index, value: cell.value, candidates: cell.candidates };
     }
 
-
-    const generateEmptyGrid = () => {
-        let grid = [];
-        for (let i = 0; i < 81; i++) {
-            grid.push({ index: i, value: undefined, candidates: [1, 2, 3, 4, 5, 6, 7, 8, 9] });
-        }
-        return grid
-    };
-
-    const copyGrid = (grid) => {
-        let newGrid = [];
-        grid.forEach(cell => {
-            newGrid.push({ ...cell });
-        });
-
-        return newGrid
-    };
-
-    const reducer = (accumulator, cell) => (cell.value) ? [...accumulator, cell.value] : accumulator;
-
-    const calculateCandidates = (grid) => {
-        grid = copyGrid(grid);
-        //lines work
-        for (let i = 0; i < 9; i++) {
-
-            let lineNumbers = grid.slice(i * 9, i * 9 + 9).reduce(reducer, []);
-
-
-            let candidates = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-            candidates = candidates.filter(number => lineNumbers.indexOf(number) == -1);
-
-            for (let index = 0; index < 9; index++) {
-                let cell = grid[index + 9 * i];
-                if (cell.value == undefined) {
-                    cell.candidates = candidates;
-                } else {
-                    cell.candidates = [];
-                }
-            }
-
-        }
-        //columns work
-        for (let i = 0; i < 9; i++) {
-            let columnNumbers = [];
-            for (let j = 0; j < 9; j++) {
-                let value = grid[i + j * 9].value;
-                if (value != undefined) columnNumbers.push(value);
-            }
-
-            columnNumbers = [...new Set(columnNumbers)];
-
-            for (let index = 0; index < 9; index++) {
-                let cell = grid[i + index * 9];
-                cell.candidates = cell.candidates.filter(number => columnNumbers.indexOf(number) == -1);
-            }
-
-        }
-
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                let indexes = [
-                    0 + j * 3 + i * 27,
-                    1 + j * 3 + i * 27,
-                    2 + j * 3 + i * 27,
-
-                    9 + j * 3 + i * 27,
-                    10 + j * 3 + i * 27,
-                    11 + j * 3 + i * 27,
-
-                    18 + j * 3 + i * 27,
-                    19 + j * 3 + i * 27,
-                    20 + j * 3 + i * 27,
-                ];
-
-                let squareNumbers = indexes.map(index => grid[index].value);
-
-                squareNumbers = [...new Set(squareNumbers)].filter(number => number != undefined);
-
-
-                for (let iter = 0; iter < 9; iter++) {
-                    let index = indexes[iter];
-                    let cell = grid[index];
-                    cell.candidates = cell.candidates.filter(number => squareNumbers.indexOf(number) == -1);
-
-                }
-            }
-        }
-
-
-        return grid
-    };
-
     const createSudokuStore = () => {
-        const { subscribe, update } = writable(generateEmptyGrid());
+        const { subscribe, update } = writable(board);
 
         return {
             subscribe,
@@ -624,10 +647,10 @@ var app = (function () {
 
     /* src\Utils.svelte generated by Svelte v3.37.0 */
 
-    const { console: console_1 } = globals;
-    const file$d = "src\\Utils.svelte";
+    const { console: console_1$1 } = globals;
+    const file$e = "src\\Utils.svelte";
 
-    function create_fragment$d(ctx) {
+    function create_fragment$e(ctx) {
     	let div;
     	let p;
     	let t0;
@@ -654,11 +677,11 @@ var app = (function () {
     			t5 = space();
     			button1 = element("button");
     			button1.textContent = "Update Candidates";
-    			add_location(p, file$d, 29, 4, 497);
-    			add_location(button0, file$d, 30, 4, 538);
-    			add_location(button1, file$d, 31, 4, 589);
+    			add_location(p, file$e, 29, 4, 497);
+    			add_location(button0, file$e, 30, 4, 538);
+    			add_location(button1, file$e, 31, 4, 589);
     			attr_dev(div, "class", "svelte-uyw1xw");
-    			add_location(div, file$d, 28, 0, 486);
+    			add_location(div, file$e, 28, 0, 486);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -699,7 +722,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment$d.name,
+    		id: create_fragment$e.name,
     		type: "component",
     		source: "",
     		ctx
@@ -708,7 +731,7 @@ var app = (function () {
     	return block;
     }
 
-    function instance$d($$self, $$props, $$invalidate) {
+    function instance$e($$self, $$props, $$invalidate) {
     	let $sudoku;
     	validate_store(sudoku, "sudoku");
     	component_subscribe($$self, sudoku, $$value => $$invalidate(5, $sudoku = $$value));
@@ -728,7 +751,7 @@ var app = (function () {
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1.warn(`<Utils> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1$1.warn(`<Utils> was created with unknown prop '${key}'`);
     	});
 
     	function onwindowresize() {
@@ -760,13 +783,13 @@ var app = (function () {
     class Utils extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$d, create_fragment$d, safe_not_equal, {});
+    		init(this, options, instance$e, create_fragment$e, safe_not_equal, {});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "Utils",
     			options,
-    			id: create_fragment$d.name
+    			id: create_fragment$e.name
     		});
     	}
     }
@@ -804,20 +827,64 @@ var app = (function () {
         }
         return undefined;
     };
+    const hiddenSingle = (grid) => {
+        const rows = getRows(grid);
+        const columns = getColumns(grid);
+        const squares = getSquares(grid);
+        const searchHiddenSingleInArray = (array) => {
+            for (let subarray of array) {
+                let count = {
+                    1: { number: 0, index: -1 },
+                    2: { number: 0, index: -1 },
+                    3: { number: 0, index: -1 },
+                    4: { number: 0, index: -1 },
+                    5: { number: 0, index: -1 },
+                    6: { number: 0, index: -1 },
+                    7: { number: 0, index: -1 },
+                    8: { number: 0, index: -1 },
+                    9: { number: 0, index: -1 },
+                };
+                for (let cell of subarray) {
+                    for (let candidate of cell.candidates) {
+                        count[candidate].number = count[candidate].number + 1;
+                        count[candidate].index = cell.index;
+                    }
+                }
+                for (let i = 1; i <= 9; i++) {
+                    if (count[i].number == 1)
+                        return { index: count[i].index, value: i };
+                }
+            }
+            return undefined;
+        };
+        let hint = searchHiddenSingleInArray(rows);
+        if (hint != undefined)
+            return new Hint$1(hint.index, hint.value, `La case mise en valeur est la seul de la ligne à pouvoir contenir le chiffre ${hint.value}`);
+        hint = searchHiddenSingleInArray(columns);
+        if (hint != undefined)
+            return new Hint$1(hint.index, hint.value, `La case mise en valeur est la seul de la colones à pouvoir contenir le chiffre ${hint.value}`);
+        hint = searchHiddenSingleInArray(squares);
+        if (hint != undefined)
+            return new Hint$1(hint.index, hint.value, `La case mise en valeur est la seul du carré à pouvoir contenir le chiffre ${hint.value}`);
+        return undefined;
+    };
 
     const getHint = (grid) => {
         let hint;
         hint = nakedSingle(grid);
         if (hint != undefined)
             return hint;
+        hint = hiddenSingle(grid);
+        if (hint != undefined)
+            return hint;
         return undefined;
     };
 
     /* src\components\HintPopup.svelte generated by Svelte v3.37.0 */
-    const file$c = "src\\components\\HintPopup.svelte";
+    const file$d = "src\\components\\HintPopup.svelte";
 
     // (71:0) {#if show}
-    function create_if_block$2(ctx) {
+    function create_if_block$3(ctx) {
     	let div2;
     	let div1;
     	let div0;
@@ -840,15 +907,15 @@ var app = (function () {
     			button = element("button");
     			button.textContent = "Ok";
     			attr_dev(p, "class", "svelte-1c4m0xj");
-    			add_location(p, file$c, 74, 12, 2176);
+    			add_location(p, file$d, 74, 12, 2176);
     			attr_dev(button, "class", "svelte-1c4m0xj");
-    			add_location(button, file$c, 75, 12, 2227);
+    			add_location(button, file$d, 75, 12, 2227);
     			attr_dev(div0, "class", "content svelte-1c4m0xj");
-    			add_location(div0, file$c, 73, 8, 2141);
+    			add_location(div0, file$d, 73, 8, 2141);
     			attr_dev(div1, "class", "popup svelte-1c4m0xj");
-    			add_location(div1, file$c, 72, 4, 2112);
+    			add_location(div1, file$d, 72, 4, 2112);
     			attr_dev(div2, "class", "graybackground svelte-1c4m0xj");
-    			add_location(div2, file$c, 71, 0, 2078);
+    			add_location(div2, file$d, 71, 0, 2078);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div2, anchor);
@@ -876,7 +943,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$2.name,
+    		id: create_if_block$3.name,
     		type: "if",
     		source: "(71:0) {#if show}",
     		ctx
@@ -885,9 +952,9 @@ var app = (function () {
     	return block;
     }
 
-    function create_fragment$c(ctx) {
+    function create_fragment$d(ctx) {
     	let if_block_anchor;
-    	let if_block = /*show*/ ctx[0] && create_if_block$2(ctx);
+    	let if_block = /*show*/ ctx[0] && create_if_block$3(ctx);
 
     	const block = {
     		c: function create() {
@@ -906,7 +973,7 @@ var app = (function () {
     				if (if_block) {
     					if_block.p(ctx, dirty);
     				} else {
-    					if_block = create_if_block$2(ctx);
+    					if_block = create_if_block$3(ctx);
     					if_block.c();
     					if_block.m(if_block_anchor.parentNode, if_block_anchor);
     				}
@@ -925,7 +992,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment$c.name,
+    		id: create_fragment$d.name,
     		type: "component",
     		source: "",
     		ctx
@@ -934,7 +1001,7 @@ var app = (function () {
     	return block;
     }
 
-    function instance$c($$self, $$props, $$invalidate) {
+    function instance$d($$self, $$props, $$invalidate) {
     	let $sudoku;
     	validate_store(sudoku, "sudoku");
     	component_subscribe($$self, sudoku, $$value => $$invalidate(3, $sudoku = $$value));
@@ -1038,11 +1105,268 @@ var app = (function () {
     class HintPopup extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$c, create_fragment$c, safe_not_equal, {});
+    		init(this, options, instance$d, create_fragment$d, safe_not_equal, {});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "HintPopup",
+    			options,
+    			id: create_fragment$d.name
+    		});
+    	}
+    }
+
+    /* src\components\CheckPopup.svelte generated by Svelte v3.37.0 */
+
+    const { console: console_1 } = globals;
+    const file$c = "src\\components\\CheckPopup.svelte";
+
+    // (83:0) {#if show}
+    function create_if_block$2(ctx) {
+    	let div2;
+    	let div1;
+    	let div0;
+    	let p;
+
+    	let t0_value = (/*asSolution*/ ctx[1]
+    	? "Le sudoku peut être résolu"
+    	: "Je ne peux pas résoudre le sudoku") + "";
+
+    	let t0;
+    	let t1;
+    	let button;
+    	let mounted;
+    	let dispose;
+
+    	const block = {
+    		c: function create() {
+    			div2 = element("div");
+    			div1 = element("div");
+    			div0 = element("div");
+    			p = element("p");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			button = element("button");
+    			button.textContent = "Ok";
+    			attr_dev(p, "class", "svelte-1c4m0xj");
+    			add_location(p, file$c, 86, 12, 2581);
+    			attr_dev(button, "class", "svelte-1c4m0xj");
+    			add_location(button, file$c, 87, 12, 2683);
+    			attr_dev(div0, "class", "content svelte-1c4m0xj");
+    			add_location(div0, file$c, 85, 8, 2546);
+    			attr_dev(div1, "class", "popup svelte-1c4m0xj");
+    			add_location(div1, file$c, 84, 4, 2517);
+    			attr_dev(div2, "class", "graybackground svelte-1c4m0xj");
+    			add_location(div2, file$c, 83, 0, 2483);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div2, anchor);
+    			append_dev(div2, div1);
+    			append_dev(div1, div0);
+    			append_dev(div0, p);
+    			append_dev(p, t0);
+    			append_dev(div0, t1);
+    			append_dev(div0, button);
+
+    			if (!mounted) {
+    				dispose = listen_dev(button, "click", /*handleClick*/ ctx[2], false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*asSolution*/ 2 && t0_value !== (t0_value = (/*asSolution*/ ctx[1]
+    			? "Le sudoku peut être résolu"
+    			: "Je ne peux pas résoudre le sudoku") + "")) set_data_dev(t0, t0_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div2);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$2.name,
+    		type: "if",
+    		source: "(83:0) {#if show}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$c(ctx) {
+    	let if_block_anchor;
+    	let if_block = /*show*/ ctx[0] && create_if_block$2(ctx);
+
+    	const block = {
+    		c: function create() {
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty();
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert_dev(target, if_block_anchor, anchor);
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (/*show*/ ctx[0]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block$2(ctx);
+    					if_block.c();
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach_dev(if_block_anchor);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$c.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$c($$self, $$props, $$invalidate) {
+    	let $sudoku;
+    	validate_store(sudoku, "sudoku");
+    	component_subscribe($$self, sudoku, $$value => $$invalidate(3, $sudoku = $$value));
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("CheckPopup", slots, []);
+
+    	var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+    		function adopt(value) {
+    			return value instanceof P
+    			? value
+    			: new P(function (resolve) {
+    						resolve(value);
+    					});
+    		}
+
+    		return new (P || (P = Promise))(function (resolve, reject) {
+    				function fulfilled(value) {
+    					try {
+    						step(generator.next(value));
+    					} catch(e) {
+    						reject(e);
+    					}
+    				}
+
+    				function rejected(value) {
+    					try {
+    						step(generator["throw"](value));
+    					} catch(e) {
+    						reject(e);
+    					}
+    				}
+
+    				function step(result) {
+    					result.done
+    					? resolve(result.value)
+    					: adopt(result.value).then(fulfilled, rejected);
+    				}
+
+    				step((generator = generator.apply(thisArg, _arguments || [])).next());
+    			});
+    	};
+
+    	let show = false;
+    	let asSolution = true;
+
+    	activeTask.subscribe(task => __awaiter(void 0, void 0, void 0, function* () {
+    		var _a;
+
+    		if (task == "check") {
+    			console.log("go");
+    			$$invalidate(0, show = true);
+    			let hint;
+    			let grid = copyGrid($sudoku);
+
+    			do {
+    				grid = calculateCandidates(grid);
+
+    				hint = (_a = getHint(grid)) === null || _a === void 0
+    				? void 0
+    				: _a.getAsObject();
+
+    				if (hint != undefined) {
+    					grid[hint.index].value = hint.value;
+    				}
+    			} while (hint != undefined);
+
+    			for (let i = 0; i < 81; i++) {
+    				if (grid[i].value == undefined) {
+    					$$invalidate(1, asSolution = false);
+    					break;
+    				}
+    			}
+    		}
+    	}));
+
+    	function handleClick() {
+    		$$invalidate(0, show = false);
+    		$$invalidate(1, asSolution = true);
+    		activeTask.set(undefined);
+    	}
+
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1.warn(`<CheckPopup> was created with unknown prop '${key}'`);
+    	});
+
+    	$$self.$capture_state = () => ({
+    		__awaiter,
+    		activeTask,
+    		sudoku,
+    		getHint,
+    		copyGrid,
+    		calculateCandidates,
+    		show,
+    		asSolution,
+    		handleClick,
+    		$sudoku
+    	});
+
+    	$$self.$inject_state = $$props => {
+    		if ("__awaiter" in $$props) __awaiter = $$props.__awaiter;
+    		if ("show" in $$props) $$invalidate(0, show = $$props.show);
+    		if ("asSolution" in $$props) $$invalidate(1, asSolution = $$props.asSolution);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [show, asSolution, handleClick];
+    }
+
+    class CheckPopup extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$c, create_fragment$c, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "CheckPopup",
     			options,
     			id: create_fragment$c.name
     		});
@@ -1601,7 +1925,7 @@ var app = (function () {
     	let largeBottom = [2, 5].includes(Math.floor(index / 9));
 
     	const handleClick = () => {
-    		if ($highlightCase == undefined) highlightCase.set(undefined);
+    		if ($highlightCase != undefined) highlightCase.set(undefined);
 
     		if ($activeTask == "erase") {
     			activeTask.set(undefined);
@@ -2707,7 +3031,7 @@ var app = (function () {
     /* src\components\ToolbarElement.svelte generated by Svelte v3.37.0 */
     const file$2 = "src\\components\\ToolbarElement.svelte";
 
-    // (41:30) 
+    // (63:30) 
     function create_if_block_4(ctx) {
     	let erase;
     	let current;
@@ -2752,14 +3076,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(41:30) ",
+    		source: "(63:30) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (39:30) 
+    // (61:30) 
     function create_if_block_3(ctx) {
     	let solve;
     	let current;
@@ -2804,14 +3128,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(39:30) ",
+    		source: "(61:30) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (37:30) 
+    // (59:30) 
     function create_if_block_2(ctx) {
     	let check;
     	let current;
@@ -2856,14 +3180,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(37:30) ",
+    		source: "(59:30) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (35:29) 
+    // (57:29) 
     function create_if_block_1(ctx) {
     	let hint;
     	let current;
@@ -2908,14 +3232,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(35:29) ",
+    		source: "(57:29) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (33:4) {#if name == 'candidates'}
+    // (55:4) {#if name == 'candidates'}
     function create_if_block(ctx) {
     	let candidates;
     	let current;
@@ -2960,7 +3284,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(33:4) {#if name == 'candidates'}",
+    		source: "(55:4) {#if name == 'candidates'}",
     		ctx
     	});
 
@@ -3011,9 +3335,9 @@ var app = (function () {
     			t1 = text(t1_value);
     			attr_dev(span, "class", "svelte-1aga6ss");
     			toggle_class(span, "isSelected", /*isSelected*/ ctx[1]);
-    			add_location(span, file$2, 44, 4, 1320);
+    			add_location(span, file$2, 66, 4, 1686);
     			attr_dev(div, "class", "tool svelte-1aga6ss");
-    			add_location(div, file$2, 31, 0, 847);
+    			add_location(div, file$2, 53, 0, 1213);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3254,7 +3578,7 @@ var app = (function () {
     			t3 = space();
     			create_component(toolbarelement4.$$.fragment);
     			attr_dev(div, "class", "svelte-j6jm7q");
-    			add_location(div, file$1, 4, 0, 81);
+    			add_location(div, file$1, 30, 0, 846);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3312,15 +3636,51 @@ var app = (function () {
     }
 
     function instance$1($$self, $$props, $$invalidate) {
+    	let $sudoku;
+    	validate_store(sudoku, "sudoku");
+    	component_subscribe($$self, sudoku, $$value => $$invalidate(0, $sudoku = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots("Toolbar", slots, []);
+
+    	activeTask.subscribe(async task => {
+    		if (task == "solve") {
+    			let hint = -1;
+
+    			let interval = setInterval(
+    				async () => {
+    					if (hint == undefined) {
+    						clearInterval(interval);
+    						activeTask.set(undefined);
+    						return;
+    					}
+
+    					await sudoku.updateCandidates();
+    					hint = getHint($sudoku)?.getAsObject();
+
+    					if (hint != undefined) {
+    						//@ts-ignore
+    						sudoku.setCellValue(hint.index, hint.value);
+    					}
+    				},
+    				50
+    			);
+    		}
+    	});
+
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<Toolbar> was created with unknown prop '${key}'`);
     	});
 
-    	$$self.$capture_state = () => ({ ToolbarElement });
+    	$$self.$capture_state = () => ({
+    		ToolbarElement,
+    		activeTask,
+    		sudoku,
+    		getHint,
+    		$sudoku
+    	});
+
     	return [];
     }
 
@@ -3350,11 +3710,14 @@ var app = (function () {
     	let t1;
     	let hintpopup;
     	let t2;
+    	let checkpopup;
+    	let t3;
     	let utils;
     	let current;
     	grid = new Grid({ $$inline: true });
     	toolbar = new Toolbar({ $$inline: true });
     	hintpopup = new HintPopup({ $$inline: true });
+    	checkpopup = new CheckPopup({ $$inline: true });
     	utils = new Utils({ $$inline: true });
 
     	const block = {
@@ -3367,11 +3730,13 @@ var app = (function () {
     			t1 = space();
     			create_component(hintpopup.$$.fragment);
     			t2 = space();
+    			create_component(checkpopup.$$.fragment);
+    			t3 = space();
     			create_component(utils.$$.fragment);
     			attr_dev(div0, "class", "column svelte-t580z7");
-    			add_location(div0, file, 26, 4, 553);
+    			add_location(div0, file, 27, 4, 611);
     			attr_dev(div1, "class", "container svelte-t580z7");
-    			add_location(div1, file, 25, 0, 525);
+    			add_location(div1, file, 26, 0, 583);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3385,6 +3750,8 @@ var app = (function () {
     			insert_dev(target, t1, anchor);
     			mount_component(hintpopup, target, anchor);
     			insert_dev(target, t2, anchor);
+    			mount_component(checkpopup, target, anchor);
+    			insert_dev(target, t3, anchor);
     			mount_component(utils, target, anchor);
     			current = true;
     		},
@@ -3394,6 +3761,7 @@ var app = (function () {
     			transition_in(grid.$$.fragment, local);
     			transition_in(toolbar.$$.fragment, local);
     			transition_in(hintpopup.$$.fragment, local);
+    			transition_in(checkpopup.$$.fragment, local);
     			transition_in(utils.$$.fragment, local);
     			current = true;
     		},
@@ -3401,6 +3769,7 @@ var app = (function () {
     			transition_out(grid.$$.fragment, local);
     			transition_out(toolbar.$$.fragment, local);
     			transition_out(hintpopup.$$.fragment, local);
+    			transition_out(checkpopup.$$.fragment, local);
     			transition_out(utils.$$.fragment, local);
     			current = false;
     		},
@@ -3411,6 +3780,8 @@ var app = (function () {
     			if (detaching) detach_dev(t1);
     			destroy_component(hintpopup, detaching);
     			if (detaching) detach_dev(t2);
+    			destroy_component(checkpopup, detaching);
+    			if (detaching) detach_dev(t3);
     			destroy_component(utils, detaching);
     		}
     	};
@@ -3435,7 +3806,14 @@ var app = (function () {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<App> was created with unknown prop '${key}'`);
     	});
 
-    	$$self.$capture_state = () => ({ Utils, HintPopup, Grid, Toolbar });
+    	$$self.$capture_state = () => ({
+    		Utils,
+    		HintPopup,
+    		CheckPopup,
+    		Grid,
+    		Toolbar
+    	});
+
     	return [];
     }
 
@@ -3453,6 +3831,7 @@ var app = (function () {
     	}
     }
 
+    //@ts-ignore
     var app = new App({
         target: document.body
     });
