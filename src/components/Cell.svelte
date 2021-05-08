@@ -8,7 +8,7 @@
     let largeRight = [2, 5].includes(index % 9)
     let largeBottom = [2, 5].includes(Math.floor(index / 9))
 
-    import { currentFocus, activeTask, sudoku } from "../stores.js"
+    import { currentFocus, activeTask, sudoku, highlightCase } from "../stores.js"
 
     import Keypad from "./Keypad.svelte"
 
@@ -32,6 +32,7 @@
 
     const handleInput = (e) => {
         sudoku.setCellValue(index, e.detail.value)
+        highlightCase.set(undefined)
         //value = e.detail.value
         currentFocus.set(undefined)
     }
@@ -80,6 +81,10 @@
         border: none;*/
     }
 
+    .isHighlighted {
+        background-color: #07CFAA;
+    }
+
     span {
         -moz-user-select: none;
         user-select: none;
@@ -97,6 +102,7 @@
     class:largeBottom
     class="cell"
     class:isSelected
+    class:isHighlighted={$highlightCase == index}
     bind:this={cell}
     on:click={handleClick}
 >

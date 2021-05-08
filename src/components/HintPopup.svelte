@@ -1,11 +1,20 @@
-<script>
-    import { activeTask } from '../stores'
+<script lang="ts">
+    import { activeTask, sudoku, highlightCase } from '../stores'
+    import { getHint } from '../solver/solver.js'
 
     let show = false
 
-    activeTask.subscribe((task) => {
+    let hint
+
+    activeTask.subscribe(async (task) => {
         if (task == 'hint') {
-            show = true
+            await sudoku.updateCandidates()
+
+            hint = getHint($sudoku)?.getAsObject()
+            if(hint != undefined) {
+                highlightCase.set(hint.index)
+                show = true
+            }
         }
     })
 
@@ -55,7 +64,7 @@
 {#if show}
 <div class="graybackground">
     <div class="popup">
-        <p>La case mise en valeur ne peux contenir qu'un 8</p>
+        <p>La case mise en valeur ne peux contenir qu'un {hint.value}</p>
         <button on:click={handleClick}>Ok</button>
     </div>
 </div>

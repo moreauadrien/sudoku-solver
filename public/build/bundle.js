@@ -498,15 +498,15 @@ var app = (function () {
 
     const activeTask = writable(undefined);
 
+    const highlightCase = writable(undefined);
 
 
-    const generateEmptyGrid = () => {
-        let grid = [];
-        for (let i = 0; i < 81; i++) {
-            grid.push({ index: i, value: undefined, candidates: [1, 2, 3, 4, 5, 6, 7, 8, 9] });
-        }
-        return grid
-    };
+    let board = JSON.parse("[{\"index\":0,\"value\":4,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":2,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":3,\"value\":2,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":4,\"value\":9,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":5,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":7,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":8,\"value\":5,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":9,\"value\":2,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":10,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":11,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":12,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":13,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":14,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":15,\"value\":8,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":16,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":17,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":18,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":19,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":20,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":21,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":22,\"value\":8,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":23,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":24,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":25,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":26,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":27,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":28,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":29,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":30,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":31,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":32,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":33,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":34,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":35,\"value\":2,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":36,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":37,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":38,\"value\":5,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":39,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":40,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":41,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":42,\"value\":4,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":43,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":44,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":45,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":46,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":47,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":48,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":49,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":50,\"value\":8,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":51,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":52,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":53,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":54,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":55,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":56,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":57,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":58,\"value\":2,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":59,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":60,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":61,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":62,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":63,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":64,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":65,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":66,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":67,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":68,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":69,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":70,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":71,\"value\":4,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":72,\"value\":8,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":73,\"value\":9,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":74,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":75,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":76,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":77,\"value\":5,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":78,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":79,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":80,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]}]");
+
+    for (let i = 0; i < 81; i++) {
+        let cell = board[i];
+        board[i] = { index: cell.index, value: cell.value, candidates: cell.candidates };
+    }
 
     const copyGrid = (grid) => {
         let newGrid = [];
@@ -584,9 +584,6 @@ var app = (function () {
                     cell.candidates = cell.candidates.filter(number => squareNumbers.indexOf(number) == -1);
 
                 }
-
-
-
             }
         }
 
@@ -595,7 +592,7 @@ var app = (function () {
     };
 
     const createSudokuStore = () => {
-        const { subscribe, update } = writable(generateEmptyGrid());
+        const { subscribe, update } = writable(/*generateEmptyGrid()*/board);
 
         return {
             subscribe,
@@ -765,15 +762,60 @@ var app = (function () {
     	}
     }
 
+    class Hint$1 {
+        constructor(index, value, hint) {
+            this.index = index;
+            this.value = value;
+            this.hint = hint;
+        }
+        getIndex() {
+            return this.index;
+        }
+        getValue() {
+            return this.value;
+        }
+        getHint() {
+            return this.hint;
+        }
+        getAsObject() {
+            return {
+                index: this.getIndex(),
+                value: this.getValue(),
+                hint: this.getHint(),
+            };
+        }
+    }
+
+    const nakedSingle = (grid) => {
+        for (let cell of grid) {
+            if (cell.candidates.length == 1) {
+                let value = cell.candidates[0];
+                return new Hint$1(cell.index, value, `La case mise en valeur ne peut contenir que un ${value}`);
+            }
+        }
+        return undefined;
+    };
+
+    const getHint = (grid) => {
+        let hint;
+        hint = nakedSingle(grid);
+        if (hint != undefined)
+            return hint;
+        return undefined;
+    };
+
     /* src\components\HintPopup.svelte generated by Svelte v3.37.0 */
     const file$c = "src\\components\\HintPopup.svelte";
 
-    // (55:0) {#if show}
+    // (68:0) {#if show}
     function create_if_block$2(ctx) {
     	let div1;
     	let div0;
     	let p;
+    	let t0;
+    	let t1_value = /*hint*/ ctx[1].value + "";
     	let t1;
+    	let t2;
     	let button;
     	let mounted;
     	let dispose;
@@ -783,32 +825,37 @@ var app = (function () {
     			div1 = element("div");
     			div0 = element("div");
     			p = element("p");
-    			p.textContent = "La case mise en valeur ne peux contenir qu'un 8";
-    			t1 = space();
+    			t0 = text("La case mise en valeur ne peux contenir qu'un ");
+    			t1 = text(t1_value);
+    			t2 = space();
     			button = element("button");
     			button.textContent = "Ok";
     			attr_dev(p, "class", "svelte-w0fk7c");
-    			add_location(p, file$c, 57, 8, 1089);
+    			add_location(p, file$c, 70, 8, 2116);
     			attr_dev(button, "class", "svelte-w0fk7c");
-    			add_location(button, file$c, 58, 8, 1153);
+    			add_location(button, file$c, 71, 8, 2191);
     			attr_dev(div0, "class", "popup svelte-w0fk7c");
-    			add_location(div0, file$c, 56, 4, 1060);
+    			add_location(div0, file$c, 69, 4, 2087);
     			attr_dev(div1, "class", "graybackground svelte-w0fk7c");
-    			add_location(div1, file$c, 55, 0, 1026);
+    			add_location(div1, file$c, 68, 0, 2053);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
     			append_dev(div1, div0);
     			append_dev(div0, p);
-    			append_dev(div0, t1);
+    			append_dev(p, t0);
+    			append_dev(p, t1);
+    			append_dev(div0, t2);
     			append_dev(div0, button);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*handleClick*/ ctx[1], false, false, false);
+    				dispose = listen_dev(button, "click", /*handleClick*/ ctx[2], false, false, false);
     				mounted = true;
     			}
     		},
-    		p: noop,
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*hint*/ 2 && t1_value !== (t1_value = /*hint*/ ctx[1].value + "")) set_data_dev(t1, t1_value);
+    		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div1);
     			mounted = false;
@@ -820,7 +867,7 @@ var app = (function () {
     		block,
     		id: create_if_block$2.name,
     		type: "if",
-    		source: "(55:0) {#if show}",
+    		source: "(68:0) {#if show}",
     		ctx
     	});
 
@@ -877,15 +924,67 @@ var app = (function () {
     }
 
     function instance$c($$self, $$props, $$invalidate) {
+    	let $sudoku;
+    	validate_store(sudoku, "sudoku");
+    	component_subscribe($$self, sudoku, $$value => $$invalidate(3, $sudoku = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots("HintPopup", slots, []);
-    	let show = false;
 
-    	activeTask.subscribe(task => {
-    		if (task == "hint") {
-    			$$invalidate(0, show = true);
+    	var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+    		function adopt(value) {
+    			return value instanceof P
+    			? value
+    			: new P(function (resolve) {
+    						resolve(value);
+    					});
     		}
-    	});
+
+    		return new (P || (P = Promise))(function (resolve, reject) {
+    				function fulfilled(value) {
+    					try {
+    						step(generator.next(value));
+    					} catch(e) {
+    						reject(e);
+    					}
+    				}
+
+    				function rejected(value) {
+    					try {
+    						step(generator["throw"](value));
+    					} catch(e) {
+    						reject(e);
+    					}
+    				}
+
+    				function step(result) {
+    					result.done
+    					? resolve(result.value)
+    					: adopt(result.value).then(fulfilled, rejected);
+    				}
+
+    				step((generator = generator.apply(thisArg, _arguments || [])).next());
+    			});
+    	};
+
+    	let show = false;
+    	let hint;
+
+    	activeTask.subscribe(task => __awaiter(void 0, void 0, void 0, function* () {
+    		var _a;
+
+    		if (task == "hint") {
+    			yield sudoku.updateCandidates();
+
+    			$$invalidate(1, hint = (_a = getHint($sudoku)) === null || _a === void 0
+    			? void 0
+    			: _a.getAsObject());
+
+    			if (hint != undefined) {
+    				highlightCase.set(hint.index);
+    				$$invalidate(0, show = true);
+    			}
+    		}
+    	}));
 
     	function handleClick() {
     		$$invalidate(0, show = false);
@@ -898,17 +997,29 @@ var app = (function () {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<HintPopup> was created with unknown prop '${key}'`);
     	});
 
-    	$$self.$capture_state = () => ({ activeTask, show, handleClick });
+    	$$self.$capture_state = () => ({
+    		__awaiter,
+    		activeTask,
+    		sudoku,
+    		highlightCase,
+    		getHint,
+    		show,
+    		hint,
+    		handleClick,
+    		$sudoku
+    	});
 
     	$$self.$inject_state = $$props => {
+    		if ("__awaiter" in $$props) __awaiter = $$props.__awaiter;
     		if ("show" in $$props) $$invalidate(0, show = $$props.show);
+    		if ("hint" in $$props) $$invalidate(1, hint = $$props.hint);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [show, handleClick];
+    	return [show, hint, handleClick];
     }
 
     class HintPopup extends SvelteComponentDev {
@@ -1296,17 +1407,17 @@ var app = (function () {
     /* src\components\Cell.svelte generated by Svelte v3.37.0 */
     const file$9 = "src\\components\\Cell.svelte";
 
-    // (89:0) {#if isSelected}
+    // (94:0) {#if isSelected}
     function create_if_block$1(ctx) {
     	let keypad;
     	let current;
 
     	keypad = new Keypad({
-    			props: { cell: /*cell*/ ctx[1] },
+    			props: { cell: /*cell*/ ctx[2] },
     			$$inline: true
     		});
 
-    	keypad.$on("numberInput", /*handleInput*/ ctx[8]);
+    	keypad.$on("numberInput", /*handleInput*/ ctx[10]);
 
     	const block = {
     		c: function create() {
@@ -1318,7 +1429,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const keypad_changes = {};
-    			if (dirty & /*cell*/ 2) keypad_changes.cell = /*cell*/ ctx[1];
+    			if (dirty & /*cell*/ 4) keypad_changes.cell = /*cell*/ ctx[2];
     			keypad.$set(keypad_changes);
     		},
     		i: function intro(local) {
@@ -1339,7 +1450,7 @@ var app = (function () {
     		block,
     		id: create_if_block$1.name,
     		type: "if",
-    		source: "(89:0) {#if isSelected}",
+    		source: "(94:0) {#if isSelected}",
     		ctx
     	});
 
@@ -1350,12 +1461,12 @@ var app = (function () {
     	let t0;
     	let div;
     	let span;
-    	let t1_value = (/*value*/ ctx[0] || "") + "";
+    	let t1_value = (/*value*/ ctx[1] || "") + "";
     	let t1;
     	let current;
     	let mounted;
     	let dispose;
-    	let if_block = /*isSelected*/ ctx[2] && create_if_block$1(ctx);
+    	let if_block = /*isSelected*/ ctx[3] && create_if_block$1(ctx);
 
     	const block = {
     		c: function create() {
@@ -1364,15 +1475,16 @@ var app = (function () {
     			div = element("div");
     			span = element("span");
     			t1 = text(t1_value);
-    			attr_dev(span, "class", "svelte-bfbenp");
-    			add_location(span, file$9, 102, 4, 2170);
-    			attr_dev(div, "class", "cell svelte-bfbenp");
-    			toggle_class(div, "borderRight", /*borderRight*/ ctx[3]);
-    			toggle_class(div, "borderBottom", /*borderBottom*/ ctx[4]);
-    			toggle_class(div, "largeRight", /*largeRight*/ ctx[5]);
-    			toggle_class(div, "largeBottom", /*largeBottom*/ ctx[6]);
-    			toggle_class(div, "isSelected", /*isSelected*/ ctx[2]);
-    			add_location(div, file$9, 92, 0, 1975);
+    			attr_dev(span, "class", "svelte-1s4y4he");
+    			add_location(span, file$9, 108, 4, 2341);
+    			attr_dev(div, "class", "cell svelte-1s4y4he");
+    			toggle_class(div, "borderRight", /*borderRight*/ ctx[5]);
+    			toggle_class(div, "borderBottom", /*borderBottom*/ ctx[6]);
+    			toggle_class(div, "largeRight", /*largeRight*/ ctx[7]);
+    			toggle_class(div, "largeBottom", /*largeBottom*/ ctx[8]);
+    			toggle_class(div, "isSelected", /*isSelected*/ ctx[3]);
+    			toggle_class(div, "isHighlighted", /*$highlightCase*/ ctx[4] == /*index*/ ctx[0]);
+    			add_location(div, file$9, 97, 0, 2095);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1383,20 +1495,20 @@ var app = (function () {
     			insert_dev(target, div, anchor);
     			append_dev(div, span);
     			append_dev(span, t1);
-    			/*div_binding*/ ctx[11](div);
+    			/*div_binding*/ ctx[12](div);
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(div, "click", /*handleClick*/ ctx[7], false, false, false);
+    				dispose = listen_dev(div, "click", /*handleClick*/ ctx[9], false, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (/*isSelected*/ ctx[2]) {
+    			if (/*isSelected*/ ctx[3]) {
     				if (if_block) {
     					if_block.p(ctx, dirty);
 
-    					if (dirty & /*isSelected*/ 4) {
+    					if (dirty & /*isSelected*/ 8) {
     						transition_in(if_block, 1);
     					}
     				} else {
@@ -1415,10 +1527,14 @@ var app = (function () {
     				check_outros();
     			}
 
-    			if ((!current || dirty & /*value*/ 1) && t1_value !== (t1_value = (/*value*/ ctx[0] || "") + "")) set_data_dev(t1, t1_value);
+    			if ((!current || dirty & /*value*/ 2) && t1_value !== (t1_value = (/*value*/ ctx[1] || "") + "")) set_data_dev(t1, t1_value);
 
-    			if (dirty & /*isSelected*/ 4) {
-    				toggle_class(div, "isSelected", /*isSelected*/ ctx[2]);
+    			if (dirty & /*isSelected*/ 8) {
+    				toggle_class(div, "isSelected", /*isSelected*/ ctx[3]);
+    			}
+
+    			if (dirty & /*$highlightCase, index*/ 17) {
+    				toggle_class(div, "isHighlighted", /*$highlightCase*/ ctx[4] == /*index*/ ctx[0]);
     			}
     		},
     		i: function intro(local) {
@@ -1434,7 +1550,7 @@ var app = (function () {
     			if (if_block) if_block.d(detaching);
     			if (detaching) detach_dev(t0);
     			if (detaching) detach_dev(div);
-    			/*div_binding*/ ctx[11](null);
+    			/*div_binding*/ ctx[12](null);
     			mounted = false;
     			dispose();
     		}
@@ -1455,10 +1571,13 @@ var app = (function () {
     	let isSelected;
     	let $currentFocus;
     	let $activeTask;
+    	let $highlightCase;
     	validate_store(currentFocus, "currentFocus");
-    	component_subscribe($$self, currentFocus, $$value => $$invalidate(10, $currentFocus = $$value));
+    	component_subscribe($$self, currentFocus, $$value => $$invalidate(11, $currentFocus = $$value));
     	validate_store(activeTask, "activeTask");
-    	component_subscribe($$self, activeTask, $$value => $$invalidate(12, $activeTask = $$value));
+    	component_subscribe($$self, activeTask, $$value => $$invalidate(13, $activeTask = $$value));
+    	validate_store(highlightCase, "highlightCase");
+    	component_subscribe($$self, highlightCase, $$value => $$invalidate(4, $highlightCase = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots("Cell", slots, []);
     	let { index } = $$props;
@@ -1486,6 +1605,7 @@ var app = (function () {
 
     	const handleInput = e => {
     		sudoku.setCellValue(index, e.detail.value);
+    		highlightCase.set(undefined);
 
     		//value = e.detail.value
     		currentFocus.set(undefined);
@@ -1500,13 +1620,13 @@ var app = (function () {
     	function div_binding($$value) {
     		binding_callbacks[$$value ? "unshift" : "push"](() => {
     			cell = $$value;
-    			$$invalidate(1, cell);
+    			$$invalidate(2, cell);
     		});
     	}
 
     	$$self.$$set = $$props => {
-    		if ("index" in $$props) $$invalidate(9, index = $$props.index);
-    		if ("value" in $$props) $$invalidate(0, value = $$props.value);
+    		if ("index" in $$props) $$invalidate(0, index = $$props.index);
+    		if ("value" in $$props) $$invalidate(1, value = $$props.value);
     	};
 
     	$$self.$capture_state = () => ({
@@ -1519,24 +1639,26 @@ var app = (function () {
     		currentFocus,
     		activeTask,
     		sudoku,
+    		highlightCase,
     		Keypad,
     		handleClick,
     		cell,
     		handleInput,
     		isSelected,
     		$currentFocus,
-    		$activeTask
+    		$activeTask,
+    		$highlightCase
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ("index" in $$props) $$invalidate(9, index = $$props.index);
-    		if ("value" in $$props) $$invalidate(0, value = $$props.value);
-    		if ("borderRight" in $$props) $$invalidate(3, borderRight = $$props.borderRight);
-    		if ("borderBottom" in $$props) $$invalidate(4, borderBottom = $$props.borderBottom);
-    		if ("largeRight" in $$props) $$invalidate(5, largeRight = $$props.largeRight);
-    		if ("largeBottom" in $$props) $$invalidate(6, largeBottom = $$props.largeBottom);
-    		if ("cell" in $$props) $$invalidate(1, cell = $$props.cell);
-    		if ("isSelected" in $$props) $$invalidate(2, isSelected = $$props.isSelected);
+    		if ("index" in $$props) $$invalidate(0, index = $$props.index);
+    		if ("value" in $$props) $$invalidate(1, value = $$props.value);
+    		if ("borderRight" in $$props) $$invalidate(5, borderRight = $$props.borderRight);
+    		if ("borderBottom" in $$props) $$invalidate(6, borderBottom = $$props.borderBottom);
+    		if ("largeRight" in $$props) $$invalidate(7, largeRight = $$props.largeRight);
+    		if ("largeBottom" in $$props) $$invalidate(8, largeBottom = $$props.largeBottom);
+    		if ("cell" in $$props) $$invalidate(2, cell = $$props.cell);
+    		if ("isSelected" in $$props) $$invalidate(3, isSelected = $$props.isSelected);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -1544,22 +1666,23 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$currentFocus, index*/ 1536) {
-    			$$invalidate(2, isSelected = $currentFocus == index);
+    		if ($$self.$$.dirty & /*$currentFocus, index*/ 2049) {
+    			$$invalidate(3, isSelected = $currentFocus == index);
     		}
     	};
 
     	return [
+    		index,
     		value,
     		cell,
     		isSelected,
+    		$highlightCase,
     		borderRight,
     		borderBottom,
     		largeRight,
     		largeBottom,
     		handleClick,
     		handleInput,
-    		index,
     		$currentFocus,
     		div_binding
     	];
@@ -1568,7 +1691,7 @@ var app = (function () {
     class Cell extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$9, create_fragment$9, safe_not_equal, { index: 9, value: 0 });
+    		init(this, options, instance$9, create_fragment$9, safe_not_equal, { index: 0, value: 1 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -1580,11 +1703,11 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*index*/ ctx[9] === undefined && !("index" in props)) {
+    		if (/*index*/ ctx[0] === undefined && !("index" in props)) {
     			console.warn("<Cell> was created without expected prop 'index'");
     		}
 
-    		if (/*value*/ ctx[0] === undefined && !("value" in props)) {
+    		if (/*value*/ ctx[1] === undefined && !("value" in props)) {
     			console.warn("<Cell> was created without expected prop 'value'");
     		}
     	}

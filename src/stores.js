@@ -4,6 +4,17 @@ export const currentFocus = writable(undefined)
 
 export const activeTask = writable(undefined)
 
+export const hint = writable(undefined)
+
+export const highlightCase = writable(undefined)
+
+
+let board = JSON.parse("[{\"index\":0,\"value\":4,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":2,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":3,\"value\":2,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":4,\"value\":9,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":5,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":7,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":8,\"value\":5,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":9,\"value\":2,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":10,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":11,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":12,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":13,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":14,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":15,\"value\":8,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":16,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":17,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":18,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":19,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":20,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":21,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":22,\"value\":8,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":23,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":24,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":25,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":26,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":27,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":28,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":29,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":30,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":31,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":32,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":33,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":34,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":35,\"value\":2,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":36,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":37,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":38,\"value\":5,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":39,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":40,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":41,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":42,\"value\":4,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":43,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":44,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":45,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":46,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":47,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":48,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":49,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":50,\"value\":8,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":51,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":52,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":53,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":54,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":55,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":56,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":57,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":58,\"value\":2,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":59,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":60,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":61,\"value\":3,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":62,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":63,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":64,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":65,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":66,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":67,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":68,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":69,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":70,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":71,\"value\":4,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":72,\"value\":8,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":73,\"value\":9,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":74,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":75,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":76,\"value\":6,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":77,\"value\":5,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":78,\"value\":1,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":79,\"candidates\":[1,2,3,4,5,6,7,8,9]},{\"index\":80,\"value\":7,\"candidates\":[1,2,3,4,5,6,7,8,9]}]")
+
+for (let i = 0; i < 81; i++) {
+    let cell = board[i]
+    board[i] = { index: cell.index, value: cell.value, candidates: cell.candidates }
+}
 
 
 const generateEmptyGrid = () => {
@@ -111,9 +122,6 @@ const calculateCandidates = (grid) => {
                 cell.candidates = cell.candidates.filter(number => squareNumbers.indexOf(number) == -1)
 
             }
-
-
-
         }
     }
 
@@ -126,7 +134,7 @@ const calculateCandidates = (grid) => {
 }
 
 const createSudokuStore = () => {
-    const { subscribe, update } = writable(generateEmptyGrid())
+    const { subscribe, update } = writable(/*generateEmptyGrid()*/board)
 
     return {
         subscribe,
