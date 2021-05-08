@@ -41,8 +41,10 @@
 
     .popup {
         background-color: white;
-        width: 600px;
-        height: 200px;
+    }
+
+    .content {
+        margin: 30px 50px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -65,8 +67,10 @@
 {#if show}
 <div class="graybackground">
     <div class="popup">
-        <p>{hint?.hint || "Aucun indice"}</p>
-        <button on:click={handleClick}>Ok</button>
+        <div class="content">
+            <p>{hint?.hint || "Aucun indice"}</p>
+            <button on:click={handleClick}>Ok</button>
+        </div>
     </div>
 </div>
 {/if}
