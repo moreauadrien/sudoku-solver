@@ -1,16 +1,20 @@
 <script>
-    export let value;
+    export let value
 
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher } from 'svelte'
 
-    const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher()
 
     const handleClick = () => {
         dispatch('numberInput', {
-            value
-        });
+            value,
+        })
     }
 </script>
+
+<div on:click={handleClick}>
+    <span>{value}</span>
+</div>
 
 <style>
     div {
@@ -27,7 +31,3 @@
         font-weight: 500;
     }
 </style>
-
-<div on:click={handleClick}>
-    <span>{value}</span>
-</div>

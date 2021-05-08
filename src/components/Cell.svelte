@@ -1,3 +1,42 @@
+<script>
+    export let index
+    export let value
+
+    let borderRight = index % 9 != 8
+    let borderBottom = Math.floor(index / 9) != 8
+
+    let largeRight = [2, 5].includes(index % 9)
+    let largeBottom = [2, 5].includes(Math.floor(index / 9))
+
+    import { currentFocus, activeTask, sudoku } from "../stores.js"
+
+    import Keypad from "./Keypad.svelte"
+
+    $: isSelected = $currentFocus == index
+
+    const handleClick = () => {
+        if ($activeTask == "erase") {
+            activeTask.set(undefined)
+            value = undefined
+            return
+        }
+
+        if (!isSelected) {
+            currentFocus.set(index)
+        } else {
+            currentFocus.set(undefined)
+        }
+    }
+
+    let cell
+
+    const handleInput = (e) => {
+        sudoku.setCellValue(index, e.detail.value)
+        //value = e.detail.value
+        currentFocus.set(undefined)
+    }
+</script>
+
 <style>
     .cell {
         width: 100%;
@@ -11,29 +50,28 @@
 
         font-size: 20px;
         transform: scale(1);
-        transition: transform .3s ease-out;
+        transition: transform 0.3s ease-out;
     }
 
     .borderRight {
-        border-right: 2px solid #F5F5F5;
+        border-right: 2px solid #f5f5f5;
     }
 
     .borderBottom {
-        border-bottom: 2px solid #F5F5F5;
+        border-bottom: 2px solid #f5f5f5;
     }
 
     .largeRight {
-        border-right: 3px solid #B8B8B8;
+        border-right: 3px solid #b8b8b8;
     }
 
     .largeBottom {
-        border-bottom: 3px solid #B8B8B8;
+        border-bottom: 3px solid #b8b8b8;
     }
 
     .isSelected {
         /*background-color: #07CFAA;*/
         color: white;
-
 
         /*opacity: 0.4;
         transform: scale(3);
@@ -46,66 +84,23 @@
         -moz-user-select: none;
         user-select: none;
     }
-    
-    
-
 </style>
 
-<script>
-    export let index;
-    export let value;
-
-    let borderRight = index%9 != 8;
-    let borderBottom = Math.floor(index / 9) != 8;
-
-    let largeRight = [2, 5].includes(index%9);
-    let largeBottom = [2, 5].includes(Math.floor(index/9));
-
-    import { currentFocus, activeTask } from '../stores.js';
-
-    import Keypad from './Keypad.svelte';
-
-    $: isSelected = $currentFocus == index;
-
-    const handleClick = () => {
-        if($activeTask == 'erase') {
-            activeTask.set(undefined);
-            value = undefined;
-            return;
-        }
-
-        if(!isSelected) {
-            currentFocus.set(index);
-        } else {
-            currentFocus.set(undefined);
-        }
-        
-    }
-
-
-    let cell;
-
-
-    const handleInput = (e) => {
-        value = e.detail.value;
-        currentFocus.set(undefined);
-    }
-</script>
-
-
 {#if isSelected}
-    <Keypad cell={cell} on:numberInput={handleInput}/>
+    <Keypad {cell} on:numberInput={handleInput} />
 {/if}
 
-<div 
+<div
     class:borderRight
     class:borderBottom
     class:largeRight
     class:largeBottom
-    class='cell'
+    class="cell"
     class:isSelected
     bind:this={cell}
     on:click={handleClick}
 >
-    <span>{value || ''}</span>
+    <span>{value || ""}</span>
 </div>
+
+

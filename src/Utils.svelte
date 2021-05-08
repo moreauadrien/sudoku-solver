@@ -1,11 +1,16 @@
 <script>
     let innerWidth;
     let innerHeight;
+
+    import { sudoku } from './stores'
+
+    const handleClick = () => {
+        console.log($sudoku);
+    }
 </script>
 
 <style>
-    p {
-        color: black;
+    div {
         position: fixed;
         left: 0;
         top: 0;
@@ -15,4 +20,7 @@
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
-<p>{innerWidth} x {innerHeight}</p>
+<div>
+    <p>{innerWidth} x {innerHeight}</p>
+    <button on:click={handleClick}>Log grid</button>
+</div>

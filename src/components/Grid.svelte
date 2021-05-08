@@ -1,3 +1,8 @@
+<script>
+    import Cell from "./Cell.svelte"
+    import { sudoku } from "../stores.js"
+</script>
+
 <style>
     div {
         --size: 450px;
@@ -11,14 +16,8 @@
     }
 </style>
 
-<script>
-    import Cell from './Cell.svelte';
-    import { sudoku } from '../stores.js';
-</script>
-
-
 <div>
     {#each $sudoku as cell}
-        <Cell index={cell.index} bind:value={cell.value}/>
+        <Cell index={cell.index} value={cell.value}/>
     {/each}
 </div>

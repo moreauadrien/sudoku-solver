@@ -1,3 +1,15 @@
+<script>
+    import ToolbarElement from './ToolbarElement.svelte'
+</script>
+
+<div>
+    <ToolbarElement name="candidates" />
+    <ToolbarElement name="hint" />
+    <ToolbarElement name="check" />
+    <ToolbarElement name="solve" />
+    <ToolbarElement name="erase" />
+</div>
+
 <style>
     div {
         width: 450px;
@@ -11,15 +23,3 @@
         justify-content: space-around;
     }
 </style>
-
-<script>
-    import ToolbarElement from './ToolbarElement.svelte';
-</script>
-
-<div>
-    <ToolbarElement name='candidates'/>
-    <ToolbarElement name='hint'/>
-    <ToolbarElement name='check'/>
-    <ToolbarElement name='solve'/>
-    <ToolbarElement name='erase'/>
-</div>

@@ -1,2 +1,2 @@
-export const gridSize = 450;
-export const cellSize = Math.round(gridSize/9);
+export const gridSize = 450
+export const cellSize = Math.round(gridSize / 9)
