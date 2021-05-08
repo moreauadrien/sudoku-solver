@@ -10,4 +10,9 @@ const nakedSingle = (grid): Hint => {
     return undefined
 }
 
+const hiddenSingle = (grid): Hint => {
+    let rows = []
+    return undefined
+}
+
 export { nakedSingle }
