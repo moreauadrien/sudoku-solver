@@ -818,22 +818,22 @@ var app = (function () {
     			t1 = space();
     			svg = svg_element("svg");
     			path = svg_element("path");
-    			add_location(p, file$d, 37, 8, 691);
-    			attr_dev(div0, "class", "content svelte-1nqrafg");
-    			add_location(div0, file$d, 36, 4, 660);
+    			add_location(p, file$d, 50, 8, 923);
+    			attr_dev(div0, "class", "content svelte-1tv2hqw");
+    			add_location(div0, file$d, 49, 4, 892);
     			attr_dev(path, "stroke-linecap", "round");
     			attr_dev(path, "stroke-linejoin", "round");
     			attr_dev(path, "stroke-width", "2");
     			attr_dev(path, "d", "M6 18L18 6M6 6l12 12");
-    			add_location(path, file$d, 41, 8, 834);
+    			add_location(path, file$d, 54, 8, 1066);
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg, "fill", "white");
     			attr_dev(svg, "viewBox", "0 0 24 24");
     			attr_dev(svg, "stroke", "white");
-    			attr_dev(svg, "class", "svelte-1nqrafg");
-    			add_location(svg, file$d, 40, 4, 727);
-    			attr_dev(div1, "class", "notification svelte-1nqrafg");
-    			add_location(div1, file$d, 35, 0, 628);
+    			attr_dev(svg, "class", "svelte-1tv2hqw");
+    			add_location(svg, file$d, 53, 4, 959);
+    			attr_dev(div1, "class", "notification svelte-1tv2hqw");
+    			add_location(div1, file$d, 48, 0, 860);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");

@@ -13,6 +13,19 @@
         align-items: center;
         justify-content: space-between;
         z-index: 1000;
+
+        animation: showPopup 0.2s ease-out forwards;
+    }
+
+    @keyframes showPopup {
+
+        from {
+            transform: translateY(-50px);
+        }
+
+        to {
+            transform: translateY(0px)
+        }
     }
 
     .content {
