@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Notification from './Notification.svelte' 
     import { activeTask, sudoku, highlightCase } from '../stores'
     import { getHint } from '../solver/solver.js'
 
@@ -15,6 +16,7 @@
                 highlightCase.set(hint.index)
             }
             show = true
+            activeTask.set(undefined)
         }
     })
 
@@ -65,12 +67,15 @@
 
 
 {#if show}
-<div class="graybackground">
+<!--<div class="graybackground">
     <div class="popup">
         <div class="content">
             <p>{hint?.hint || "Aucun indice"}</p>
             <button on:click={handleClick}>Ok</button>
         </div>
     </div>
-</div>
+</div>-->
+
+<Notification message={hint?.hint || "Aucun indice"} on:click={() => show=false}/>
+
 {/if}

@@ -29,7 +29,7 @@ const generateEmptyGrid = () => {
 }
 
 const createSudokuStore = () => {
-    const { subscribe, update } = writable(generateEmptyGrid())
+    const { subscribe, update } = writable(board)
 
     return {
         subscribe,

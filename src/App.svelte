@@ -4,6 +4,7 @@
 	import CheckPopup from './components/CheckPopup.svelte'
     import Grid from './components/Grid.svelte'
     import Toolbar from './components/Toolbar.svelte'
+    import Notification from './components/Notification.svelte'
 </script>
 
 <style>
