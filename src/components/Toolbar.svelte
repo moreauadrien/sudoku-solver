@@ -1,6 +1,8 @@
 <script>
     import ToolbarElement from './ToolbarElement.svelte'
-    import { activeTask, sudoku } from '../stores.js'
+    import { sudoku } from '../stores.js'
+    import { activeTask } from  '../task_manager'
+
     import { getHint } from '../solver/solver'
 
     activeTask.subscribe(async (task) => {

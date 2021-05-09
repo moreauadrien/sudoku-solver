@@ -8,7 +8,12 @@
     let largeRight = [2, 5].includes(index % 9)
     let largeBottom = [2, 5].includes(Math.floor(index / 9))
 
-    import { currentFocus, activeTask, sudoku, highlightCase } from "../stores.js"
+    import { currentFocus, sudoku, highlightCase } from "../stores.js"
+
+    import { activeTask } from  '../task_manager'
+
+
+    import { notificationManager } from '../notification_manager'
 
     import Keypad from "./Keypad.svelte"
 
@@ -16,6 +21,11 @@
 
     const handleClick = () => {
         if($highlightCase != undefined) highlightCase.set(undefined)
+
+        if($notificationManager?.type == 'hint') {
+            notificationManager.dismiss($notificationManager.id)
+        }
+
         if ($activeTask == "erase") {
             if(value == undefined) activeTask.set(undefined)
             sudoku.setCellValue(index, undefined)

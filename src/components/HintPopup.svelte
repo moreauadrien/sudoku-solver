@@ -1,7 +1,9 @@
 <script lang="ts">
-    import Notification from './Notification.svelte' 
-    import { activeTask, sudoku, highlightCase } from '../stores'
+    import { sudoku, highlightCase } from '../stores'
+    import { notificationManager } from '../notification_manager'
     import { getHint } from '../solver/solver.js'
+
+    import { activeTask } from  '../task_manager'
 
     let show = false
 
@@ -12,10 +14,13 @@
             await sudoku.updateCandidates()
 
             hint = getHint($sudoku)?.getAsObject()
-            if(hint != undefined) {
+            if (hint != undefined) {
                 highlightCase.set(hint.index)
+                notificationManager.notify('hint', hint.hint, 'success')
+            } else {
+                notificationManager.notify('hint', "Pas d'indice disponible", 'danger')
             }
-            show = true
+            
             activeTask.set(undefined)
         }
     })
@@ -76,6 +81,6 @@
     </div>
 </div>-->
 
-<Notification message={hint?.hint || "Aucun indice"} on:click={() => show=false}/>
+<!--<Notification message={hint?.hint || "Aucun indice"} on:click={() => show=false}/>-->
 
 {/if}

@@ -5,8 +5,6 @@ import { calculateCandidates } from './solver/utils'
 
 export const currentFocus = writable(undefined)
 
-export const activeTask = writable(undefined)
-
 export const hint = writable(undefined)
 
 export const highlightCase = writable(undefined)

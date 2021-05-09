@@ -7,7 +7,8 @@
     import Solve from '../icons/Solve.svelte'
     import Erase from '../icons/Erase.svelte'
 
-    import { activeTask } from '../stores'
+    import { activeTask } from  '../task_manager'
+
 
     let defaultIconColor = '#D3D3D3'
     let selectedIconColor = '#04CDAA'

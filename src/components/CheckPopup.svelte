@@ -1,7 +1,10 @@
 <script lang="ts">
-    import { activeTask, sudoku } from '../stores'
+    import { sudoku } from '../stores'
     import { getHint } from '../solver/solver.js'
     import { copyGrid, calculateCandidates } from '../solver/utils.js'
+
+    import { activeTask } from  '../task_manager'
+
 
     let show = false
 
