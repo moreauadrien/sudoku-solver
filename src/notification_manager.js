@@ -7,13 +7,23 @@ const createNotificationStore = () => {
 
     return {
         subscribe,
-        notify: (type, message, status, seconds = 30) => {
-            set({ id: ++current_id, type, message, status, seconds })
+        notify: (message, status, type = undefined) => {
+            update(current => {
+                if (current != undefined) {
+
+                    setTimeout(() => {
+                        set({ id: ++current_id, type, message, status })
+                    }, 25)
+                    return undefined
+                }
+
+                return { id: ++current_id, type, message, status }
+            })
             return current_id
         },
         dismiss: (id) => {
             if (id == current_id) {
-                update((object) => ({ ...object, dismiss: true }))
+                update(current => ({ ...current, dismiss: true }))
                 setTimeout(() => {
                     set(undefined)
                 }, 200)

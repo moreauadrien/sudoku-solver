@@ -1,6 +1,5 @@
 <script lang="ts">
     import Utils from './Utils.svelte'
-	import CheckPopup from './components/CheckPopup.svelte'
     import Grid from './components/Grid.svelte'
     import Toolbar from './components/Toolbar.svelte'
     import Notification from './components/Notification.svelte'
@@ -33,7 +32,6 @@
     <!--<ButtonsList />-->
 </div>
 
-<CheckPopup />
 
 <Utils />
 
