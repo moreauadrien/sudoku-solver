@@ -1822,7 +1822,7 @@ var app = (function () {
     			span = element("span");
     			t1 = text(t1_value);
     			attr_dev(span, "class", "svelte-1s4y4he");
-    			add_location(span, file$9, 109, 4, 2383);
+    			add_location(span, file$9, 109, 4, 2406);
     			attr_dev(div, "class", "cell svelte-1s4y4he");
     			toggle_class(div, "borderRight", /*borderRight*/ ctx[5]);
     			toggle_class(div, "borderBottom", /*borderBottom*/ ctx[6]);
@@ -1830,7 +1830,7 @@ var app = (function () {
     			toggle_class(div, "largeBottom", /*largeBottom*/ ctx[8]);
     			toggle_class(div, "isSelected", /*isSelected*/ ctx[3]);
     			toggle_class(div, "isHighlighted", /*$highlightCase*/ ctx[4] == /*index*/ ctx[0]);
-    			add_location(div, file$9, 98, 0, 2137);
+    			add_location(div, file$9, 98, 0, 2160);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1937,7 +1937,7 @@ var app = (function () {
     		if ($highlightCase != undefined) highlightCase.set(undefined);
 
     		if ($activeTask == "erase") {
-    			activeTask.set(undefined);
+    			if (value == undefined) activeTask.set(undefined);
     			sudoku.setCellValue(index, undefined);
     			return;
     		}

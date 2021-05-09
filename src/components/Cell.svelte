@@ -17,7 +17,7 @@
     const handleClick = () => {
         if($highlightCase != undefined) highlightCase.set(undefined)
         if ($activeTask == "erase") {
-            activeTask.set(undefined)
+            if(value == undefined) activeTask.set(undefined)
             sudoku.setCellValue(index, undefined)
             return
         }
