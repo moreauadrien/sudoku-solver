@@ -1400,10 +1400,10 @@ var app = (function () {
     			div = element("div");
     			span = element("span");
     			t = text(/*value*/ ctx[0]);
-    			attr_dev(span, "class", "svelte-y5qp4o");
-    			add_location(span, file$b, 15, 4, 290);
-    			attr_dev(div, "class", "svelte-y5qp4o");
-    			add_location(div, file$b, 14, 0, 256);
+    			attr_dev(span, "class", "svelte-1wj0fh");
+    			add_location(span, file$b, 39, 4, 768);
+    			attr_dev(div, "class", "svelte-1wj0fh");
+    			add_location(div, file$b, 38, 0, 734);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
